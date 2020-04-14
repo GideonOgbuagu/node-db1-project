@@ -15,4 +15,48 @@ router.get("/", (req, res) => {
       })
 })
 
+router.get("/:id", (req, res) => {
+  const { id } = req.params;
+    db.from("accounts")
+      .where({id: id})
+      .then(account => {
+        res.status(200).json({data: account})
+      })
+})
+
+router.post("/", (req, res) => {
+    const accountData = req.body;
+    db("accounts")
+      .insert(accountData, "id")
+      .then(ids => {
+        const id = ids[0];
+        db("accounts")
+          .where({ id })
+          .first()
+          .then(accounts => {
+            res.status(201).json({ data: accounts });
+          });
+      })
+      .catch(error => {
+        console.log(error);
+        res.status(500).json({ error: error.message });
+      });
+  });
+
+  // router.put("/:id", (req, res) => {
+  //   const { id } = req.params;
+  //   const changes = req.body;
+  //   db.from("accounts")
+  //     .where({id: id})
+  //     .update(changes)
+  //     .then(update_count => {
+  //       if(update_count > 0) {
+  //         res.status(200).json({message: "update successful"})
+  //       }else {
+  //         es.status(404).json({ message: "no posts by that id found" });
+  //       }
+        
+  //     })
+  // })
+
 module.exports = router;
