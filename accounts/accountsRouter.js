@@ -43,20 +43,24 @@ router.post("/", (req, res) => {
       });
   });
 
-  // router.put("/:id", (req, res) => {
-  //   const { id } = req.params;
-  //   const changes = req.body;
-  //   db.from("accounts")
-  //     .where({id: id})
-  //     .update(changes)
-  //     .then(update_count => {
-  //       if(update_count > 0) {
-  //         res.status(200).json({message: "update successful"})
-  //       }else {
-  //         es.status(404).json({ message: "no posts by that id found" });
-  //       }
+  router.put("/:id", (req, res) => {
+    const { id } = req.params;
+    const changes = req.body;
+    db.from("accounts")
+      .where({id: id})
+      .update(changes)
+      .then(update_count => {
+        if(update_count > 0) {
+          res.status(200).json({message: "update successful"})
+        }else {
+          res.status(404).json({ message: "no posts by that id found" });
+        }
         
-  //     })
-  // })
+      })
+      .catch(err => {
+        console.log(err)
+        res.status(500).json({error: err.message })
+      })
+  })
 
 module.exports = router;
