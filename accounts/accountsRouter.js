@@ -63,4 +63,19 @@ router.post("/", (req, res) => {
       })
   })
 
+  router.delete("/:id", (req, res) => {
+    const { id } = req.params;
+    db.from("accounts")
+      .where({ id: id })
+      .del()
+      .then(deleted => {
+        console.log(deleted)
+        res.status(204).end()
+      })
+      .catch(err => {
+        console.log(err)
+        res.status(500).json({error: err.message})
+      })
+  })
+
 module.exports = router;
